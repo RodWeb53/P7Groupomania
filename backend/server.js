@@ -1,6 +1,5 @@
 //Import du package HTTP de node
 const http = require('http');
-// pour la version de production mettre :''const http = require('https');'' à la place de la ligne précedente
 //Import de l'application app
 const app = require('./app');
 
