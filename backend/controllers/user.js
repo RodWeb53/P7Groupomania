@@ -2,7 +2,7 @@
 const bcrypt = require('bcryptjs');
 //Import du modèle
 const models = require('../models/');
-const User = require('../models/user');
+//const User = require('../models/user');
 //Import de Jsonwebtoken pour le haschage du token
 const jwt = require('jsonwebtoken');
 //import de dotenv pour gérer des variables cachées
@@ -36,7 +36,7 @@ exports.signup = (req, res, next) => {
     }
     //Verification que le Mdp correspond au schéma de password-validator 
     if(!schema.validate(req.body.password)) {
-        res.status(403).json({ message: "Veuillez saisir un mot de passe fort, entre 8 et 40 caractères avec au moins un caractère majuscule et un minuscule et 1 chiffre."})
+        res.status(403).json({ message: "Veuillez saisir un mot de passe fort, entre 8 et 60 caractères avec au moins un caractère majuscule et un minuscule et 1 chiffre."})
     }
     
     console.log(req.body)
@@ -53,33 +53,48 @@ exports.signup = (req, res, next) => {
                     email: req.body.email,
                     password: hash,
                     name: req.body.name,
-                    bio: 'Veuillez compléter votre profil...',
-                    isAdmin: 0,
+                    bio: 'Veuillez compléter votre Bio...',
+                    ismoderateur: 0,
                     avatar: "http://localhost:3000/images/avatar-default.png"
                 })
-                .then((newUser) => res.status(201).json({ message: 'Utilisateur créé avec l\'id ' + newUser.userId }))
+                .then((newUser) => res.status(201).json({ message: "Utilisateur créé avec l'id " + newUser.userId }))
                 .catch(error => res.status(400).json({ error }));     
             })    
         } else {
-            return res.status(409).json({ error: 'L \'utilisateur existe déjà'})
+            return res.status(409).json({ error: 'L \'utilisateur déjà inscrit'})
         }
     })
     .catch(error => res.status(500).json({ error }))      
-/*
-    bcrypt.hash(req.body.password, 10)
-        .then(hash => {
-            const user = new User({
-                email: req.body.email,
-                password: hash,
-                name: req.body.name,
-                bio: 'Pensez à compléter la bio de votre profil...',
-                isModerateur: 0,
-                avatar: "http://localhost:3000/images/img-profil-base.png"
-            });
-            user.save()
-                .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-                .catch(error => res.status(400).json({ error }));
-        })
-        .catch(error => res.status(500).json({ error }));
-        */
+
 };
+
+// version projet 6 avec modif sql
+exports.login = (req, res, next) => {
+    models.User.findOne({ 
+        attributes: ['email', 'userId', 'password', 'isModerateur'],
+        where: { email: req.body.email }
+    })
+      .then(user => {
+        if (user){
+            bcrypt.compare(req.body.password, user.password)
+            .then(valid => {
+                if (!valid) return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                res.status(200).json({
+                    userId: user.userId,
+                    ismoderateur: user.ismoderateur,
+                    token: jwt.sign(
+                        { userId: user.userId },
+                        //la cle token est cachée par dotenv
+                        `${process.env.DB_USER}`,
+                        { expiresIn: '24h' }
+                        )
+                    })
+                })
+                .catch(error => res.status(500).json({ error }))
+                
+            } else {
+                return res.status(401).json({ error: 'Utilisateur non trouvé !'})
+            }
+      })
+      .catch(error => res.status(500).json({ error }));
+  };

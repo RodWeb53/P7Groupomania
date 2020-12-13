@@ -3,16 +3,11 @@
     
     <div class="card">
       <div class="card-header text-center">
-        <h1>Inscription au réseau social de Groupomania</h1>
+        <h1>Connexion au réseau social de Groupomania</h1>
       </div>
 
 
       <form action="" class="card-body  mt-3 w-75 ml-auto mr-auto">
-
-        <div class="form-group">
-          <label class="ml-2" for="name">Entrez votre Pseudo</label>
-          <input v-model="name" type="text" id="name" class="form-control">
-        </div>
 
         <div class="form-group">
           <label class="ml-2" for="email">Entrez votre email</label>
@@ -25,7 +20,7 @@
         </div>
 
         <div class="form-group text-center">
-          <button class="btn btn-primary" @click="register()">S'incrire</button>
+          <button class="btn btn-primary" @click="login()">Se connecter</button>
         </div>
 
       </form>
@@ -38,32 +33,33 @@
 import axios from 'axios'
 
 export default {
-  name: 'SignUp',
+  name: 'Login',
   data () {
     return{
-      name: '',
       email: '',
-      password: ''
+      password: '',
     }
   },
   methods: {
-        register() {
-          axios.post('http://localhost:3000/signup', {
-            name: this.name,
+        login() {
+          axios.post('http://localhost:3000/login', {
             email: this.email,
             password: this.password,
             })
             .then(response => {
               
               console.log(response.data)
-              this.$router.push('/login')
+              this.$store.dispatch('setToken', response.data.token)
+              this.$store.dispatch('setUser', response.data.userId)
+              this.$store.dispatch('setModerateur', response.data.isModerateur)
+              this.$router.push('/message')
               
             })
             .catch(error => {
               
-              console.log('Impossible de créer votre compte: ', error.response);
+              console.log("Une erreur s'est produite: ", error.response);
             })
-        }
+        },
       }
   
 }

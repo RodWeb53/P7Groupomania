@@ -3,10 +3,10 @@
     
     <div class="card">
       <div class="card-header text-center">
-        <h1>Bienvenue sur le réseau social de Groupomania</h1>
+        <h1>Page pour les messages</h1>
       </div>
       <div>
-        <p class="text-center"><img class="card-body w-50" src="../assets/icon-above-font.png" alt="Logo de groupomania"></p>
+        <p class="text-center"><img class="card-body w-50" src="../assets/icon.png" alt="Logo de groupomania"></p>
       </div>
 
       
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: 'Accueil'
+  name: 'Message'
 }
 </script>
 

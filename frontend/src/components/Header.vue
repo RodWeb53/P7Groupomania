@@ -33,7 +33,23 @@
         </ul>
 
         <ul class="navbar-nav ">
-          <li class="nav-item">
+          <li class="nav-item" @click="message()">
+            <a class="nav-link" href="#">
+              Messages
+              <i class="fas fa-sign-in-alt"></i>
+            </a>
+          </li>
+
+          <li class="nav-item" >
+            <a class="nav-link" href="#">
+              Profil
+              <i class="far fa-id-card"></i>
+            </a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav ">
+          <li class="nav-item" @click="login()">
             <a class="nav-link" href="#">
               Se connecter
               <i class="fas fa-sign-in-alt"></i>
@@ -68,6 +84,13 @@ export default {
     signup() {
       this.$router.push('/signup')
     },
+    login() {
+      this.$router.push('/login')
+    },
+    message() {
+      this.$router.push('/message')
+    },
+
 
   }
 }
