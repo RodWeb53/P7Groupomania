@@ -81,11 +81,11 @@ exports.login = (req, res, next) => {
                 if (!valid) return res.status(401).json({ error: 'Mot de passe incorrect !' });
                 res.status(200).json({
                     userId: user.userId,
-                    ismoderateur: user.ismoderateur,
+                    ismoderateur: user.isModerateur,
                     token: jwt.sign(
                         { userId: user.userId },
                         //la cle token est cachée par dotenv
-                        `${process.env.DB_USER}`,
+                        process.env.TOKEN,
                         { expiresIn: '24h' }
                         )
                     })
@@ -98,3 +98,23 @@ exports.login = (req, res, next) => {
       })
       .catch(error => res.status(500).json({ error }));
   };
+
+
+exports.viewProfil = (req, res, next) => {
+    models.User.findOne({
+        attributes: ['name', 'email', 'bio', 'avatar', 'isModerateur', 'userId'],
+        where: { userId: req.params.userId }
+    })
+    .then((user) => {
+        if (user) {
+            res.status(201).json(user);
+        } else {
+            res.status(404).json({ error: "Impossible de trouver l'utilisateur" })
+        }
+    })
+    .catch((error) => {
+        res.status(500).json({ error: "Impossible de trouver le profil" })
+    })
+};
+
+

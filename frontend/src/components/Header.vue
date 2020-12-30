@@ -20,16 +20,7 @@
               <span class="sr-only">(current)</span>
             </a>
           </li>
-<!--          
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              Notification
-              <i class="fa fa-envelope-o">
-                <span class="badge badge-danger">Compteur</span>
-              </i>              
-            </a>
-          </li>
--->          
+         
         </ul>
 
         <ul class="navbar-nav ">
@@ -40,7 +31,7 @@
             </a>
           </li>
 
-          <li class="nav-item" >
+          <li class="nav-item" @click="profil()">
             <a class="nav-link" href="#">
               Profil
               <i class="far fa-id-card"></i>
@@ -86,6 +77,9 @@ export default {
     },
     login() {
       this.$router.push('/login')
+    },
+    profil() {
+      this.$router.push('/profil')
     },
     message() {
       this.$router.push('/message')

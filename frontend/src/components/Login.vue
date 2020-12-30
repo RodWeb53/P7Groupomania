@@ -20,7 +20,7 @@
         </div>
 
         <div class="form-group text-center">
-          <button class="btn btn-primary" @click="login()">Se connecter</button>
+          <button class="btn btn-primary" @click.prevent="login()">Se connecter</button>
         </div>
 
       </form>

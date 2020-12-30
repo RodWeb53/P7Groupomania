@@ -9,7 +9,8 @@ const db = require('./config/db');
 
 //Import des routes pour l'authantification
 const userRoutes = require('./routes/user');
-
+const msgRoutes = require('./routes/message');
+const commentRoutes = require('./routes/comment');
 //Import du path pour pouvoir touver les images de la directory images
 const path = require('path');
 //import de dotenv pour gérer des variables cachées
@@ -51,7 +52,8 @@ app.use(bodyParser.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 //Middleware pour gérer le lien vers les sauces via le controllers
 app.use('/', userRoutes);
-
+app.use('/', msgRoutes);
+app.use('/', commentRoutes);
 
 
 //Export de l'application app

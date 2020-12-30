@@ -25,7 +25,7 @@
         </div>
 
         <div class="form-group text-center">
-          <button class="btn btn-primary" @click="register()">S'incrire</button>
+          <button class="btn btn-primary" @click.prevent="register()">S'incrire</button>
         </div>
 
       </form>
