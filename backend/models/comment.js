@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     commentId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true // Automatically gets converted to SERIAL for postgres
+      autoIncrement: true 
     },
     comment: DataTypes.TEXT,
     userId: DataTypes.INTEGER,

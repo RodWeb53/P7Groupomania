@@ -31,14 +31,11 @@ export default new Vuex.Store({
     setToken ({commit}, token) {
       commit('setToken', token)
     },
-
-    
     setUser ({commit}, user) {
       commit('setUser', user)
     },
     setModerateur ({commit}, moderateur) {
       commit('setModerateur', moderateur)
     }
-
   }
 })

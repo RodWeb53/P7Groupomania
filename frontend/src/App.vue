@@ -13,7 +13,7 @@ export default {
   components: {
     'header-top': Header
   }
-}
+};
 </script>
 
 <style>

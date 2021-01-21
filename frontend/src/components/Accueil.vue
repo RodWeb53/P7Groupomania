@@ -8,9 +8,6 @@
       <div>
         <p class="text-center"><img class="card-body w-50" src="../assets/icon-above-font.png" alt="Logo de groupomania"></p>
       </div>
-
-      
-      
     </div>
   </div>
   

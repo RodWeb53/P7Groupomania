@@ -1,25 +1,23 @@
 <template>
   <div class="container mt-3" v-if="$store.state.isUserLoggedIn">
-    <!-- Card pour la création d'un post -->
     <!-- Bouton pour faire apparaitre la fenêtre de création d'un POST -->
     <div class="text-center">
       <button class="btn btn-primary mb-2" v-on:click="newPost = !newPost">Ajouter un Post</button>
     </div>
+    <!-- /// Card pour la création d'un post \\\ -->
     <div v-if="newPost" class="card">
       <h3 class="card-header text-center">Créez votre message</h3>
-
       <form action="" class="card-body  mt-1 w-75 ml-auto mr-auto">
-
         <div class="form-group">
           <textarea class="form-control" name="content" id="texteMessage" rows="4" v-model="content" maxlength="500" placeholder="Saisir un texte de 500 caractères maximum"></textarea>
         </div>
-
         <div class="form-group text-center mb-1">
           <button class="btn btn-primary" @click.prevent="postMessage()">Publier votre Post</button>
         </div>
-
       </form>
     </div>
+    <!-- /// Fin pour la création d'un post \\\ -->
+
     <!-- lignes de card pour faire apparaitre les posts plus les commentaires -->
     <div class="container mt-3" v-bind:key="index" v-for="(message, index) in allMessages">
       <div class="row">
@@ -28,18 +26,21 @@
               <div class="card-header">
                 <div class="row">
                   <div class="col-2">
+                    <!-- Routage pour aller vers le profil de l'utilisateur du message sur un clic sur son avatar -->
                     <router-link :to="`/profil/${message.User.userId}`">
                       <img :src="message.User.avatar" style="width:60px">
                     </router-link>
                   </div>
                   <div class="col-5">
                     <p>Créer par : {{ message.User.name }}</p>
+                    <!-- Routage pour aller vers le message avec un clic sur le nombre de like -->
                     <router-link :to="`/message/${message.msgId}`">
                       <p><i class="far fa-thumbs-up"></i> {{ totalLikes[index] }}</p>
                     </router-link>
                   </div>
                   <div class="col-5">
                     <p>Le : {{ message.createdAt | formatDate }}</p>
+                    <!-- Routage pour aller vers le message avec un clic sur le nombre de commentaire -->
                     <router-link :to="`/message/${message.msgId}`">
                       <p>Voir les : {{ totalComments[index] }} commentaires</p>
                     </router-link>
@@ -67,12 +68,11 @@ export default {
     return {
       content: '',
       allMessages: [],
-      usersLikes: [],
+      usersLiked: [],
       totalLikes: [],
       totalComments: [],
       messagesId: [],
       newPost: false,
-      comment: ''
     }
   },
   methods : {
@@ -86,20 +86,19 @@ export default {
         Swal.fire({
           icon: 'success',
           title: 'Message publié',
-          showConfirmButton: 'false',
+          showConfirmButton: false,
           timer: 2000
         })
         window.location.reload()
       })
-      .catch(error => {
-        console.log("Message non publié: ", error.response);
+      .catch(error => {console.log("Message non publié: ", error.response);
         Swal.fire({
-                title: "Une erreur est survenue",
-                icon: "error",
-                timer: 2500,
-                showConfirmButton: false,
-                timerProgressBar: true
-            }) 
+          title: "Une erreur est survenue",
+          icon: "error",
+          timer: 2500,
+          showConfirmButton: false,
+          timerProgressBar: true
+        }) 
       })
     },
   },
@@ -109,22 +108,16 @@ export default {
       headers: {Authorization: `Bearer ${store.state.token}`},}
       )
       .then(response => {
-        console.log(response)
-        console.log("passage dans le premier then")
         for(const message of response.data.messages){
         this.allMessages.push(message)
         }
         this.allMessages.forEach(message => {
           this.messagesId.push(message.msgId)
           })
-          for(let i=0; i < this.messagesId.length; i++){
-              
+          for(let i=0; i < this.messagesId.length; i++){ 
             axios.get(`http://localhost:3000/message/${this.messagesId[i]}/like`, {
-              headers: {Authorization: `Bearer ${store.state.token}`},}
-              )
+              headers: {Authorization: `Bearer ${store.state.token}`},})
               .then(response => {
-                console.log(response)
-                console.log("passage dans le deuxieme then")
                 this.totalLikes.push(response.data.likes.count)
                 this.usersLiked = []
                 this.usersLiked.push(response.data.likes.rows);
@@ -134,27 +127,16 @@ export default {
                   headers: {Authorization: `Bearer ${store.state.token}`},}
                 )
                 .then(response => {
-                  console.log(response)
-                  console.log("passage dans le troisieme then")
                   this.totalComments.push(response.data.comments.length)
                 })
      
-                .catch(error => {
-                  console.log('An error occurred:', error.response);
-                })
+                .catch(error => {console.log('An error occurred:', error.response);})
               })     
-            .catch(error => {
-              console.log('An error occurred:', error.response);
-            })
+            .catch(error => {console.log('An error occurred:', error.response);})
           }    
         })   
-        .catch(error => {
-          console.log('An error occurred:', error.response);
-        })
-
-
+        .catch(error => {console.log('An error occurred:', error.response);})
     },
-
 }
 
 

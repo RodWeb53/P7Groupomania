@@ -2,7 +2,6 @@
 const bcrypt = require('bcryptjs');
 //Import du modèle
 const models = require('../models/');
-//const User = require('../models/user');
 //Import de Jsonwebtoken pour le haschage du token
 const jwt = require('jsonwebtoken');
 //import de dotenv pour gérer des variables cachées
@@ -24,6 +23,14 @@ schema
 .has().not().spaces()           // Ne doit pas avoir d'espace, pas pris en compte
 
 
+const getUserId = (req) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.TOKEN);
+    const userId = decodedToken.userId;
+    return userId;
+}
+  
+// -- Module d'enregistrement d'un Utilisateur -- \\
 exports.signup = (req, res, next) => {
     
     //Vérification si l'adresse mail est valide avec Mail-Validator
@@ -38,8 +45,6 @@ exports.signup = (req, res, next) => {
     if(!schema.validate(req.body.password)) {
         res.status(403).json({ message: "Veuillez saisir un mot de passe fort, entre 8 et 60 caractères avec au moins un caractère majuscule et un minuscule et 1 chiffre."})
     }
-    
-    console.log(req.body)
 
     models.User.findOne({
         attributes: ['email'],
@@ -47,7 +52,7 @@ exports.signup = (req, res, next) => {
     })
     .then((userFound) => {
         if (!userFound) {
-            bcrypt.hash(req.body.password, 10) // 10 salage du password
+            bcrypt.hash(req.body.password, 10) // 10 passe de salage du password
             .then(hash => {
                 const newUser = models.User.create ({
                     email: req.body.email,
@@ -61,14 +66,14 @@ exports.signup = (req, res, next) => {
                 .catch(error => res.status(400).json({ error }));     
             })    
         } else {
-            return res.status(409).json({ error: 'L \'utilisateur déjà inscrit'})
+            return res.status(409).json({ error: 'Utilisateur déjà inscrit'})
         }
     })
     .catch(error => res.status(500).json({ error }))      
 
 };
 
-// version projet 6 avec modif sql
+// -- Module de login d'un Utilisateur -- \\
 exports.login = (req, res, next) => {
     models.User.findOne({ 
         attributes: ['email', 'userId', 'password', 'isModerateur'],
@@ -99,7 +104,7 @@ exports.login = (req, res, next) => {
       .catch(error => res.status(500).json({ error }));
   };
 
-
+// -- Module de chargement d'un Utilisateur -- \\
 exports.viewProfil = (req, res, next) => {
     models.User.findOne({
         attributes: ['name', 'email', 'bio', 'avatar', 'isModerateur', 'userId'],
@@ -112,9 +117,75 @@ exports.viewProfil = (req, res, next) => {
             res.status(404).json({ error: "Impossible de trouver l'utilisateur" })
         }
     })
-    .catch((error) => {
-        res.status(500).json({ error: "Impossible de trouver le profil" })
+    .catch((error) => {res.status(500).json({ error: "Impossible de trouver le profil" })
     })
 };
 
+// -- Module de modification de la Biographie d'un Utilisateur -- \\
+exports.updateProfil = (req, res, next) => {
+    models.User.findOne({
+        where: { userId: req.params.userId }
+    })
+    .then((userFound) => {
+        if (userFound) {
+            models.User.findOne({
+                attributes: [ 'isModerateur'],
+                where: { userId: getUserId(req) }
+            })
+            .then((userIsModerateur) => {
+                if((getUserId(req) == req.params.userId) || (userIsModerateur.dataValues.isModerateur == true)) {
+                    models.User.update(req.body, {
+                        attributes: [ 'bio'],
+                        where: { userId: req.params.userId }
+                    })
+                    .then(() => res.status(201).json({ message: 'Profil mis à jour'}))
+                    .catch((error) => res.status(500).json ({ error }))
+                } else {
+                    res.status(401).json({ error: "Vous n'avez pas les autorisation pour mettre à jour le profil" })
+                }
+            })
+        } else {
+          res.status(404).json({ error: 'Utilisateur non trouvé' })
+        }
+    })
+    .catch((error) => {res.status(500).json({ error: 'Impossible de mettre à jour le profil' })
+    })
+}
 
+// -- Module de suppression d'un Utilisateur -- \\
+exports.deleteProfil = (req, res, next) => {
+    models.User.findOne({
+        where: { userId: req.params.userId }
+    })
+    .then((userFound) => {
+        if (userFound) {
+            models.User.findOne({
+                attributes: [ 'isModerateur'],
+                where: { userId: getUserId(req) }
+            })
+            .then((userIsModerateur) => {
+                if ((getUserId(req) == userFound.userId) || (userIsModerateur.dataValues.isModerateur == true)) {
+                    models.User.destroy({
+                        where: { userId: req.params.userId }
+                    })
+                    .then(() => res.status(201).json({ message: 'Compte supprimé'}))
+                    .catch((error) => res.status(404).json({ error })) 
+                } else {
+                    res.status(401).json({ error: 'Vous n\'êtes pas autorisé à supprimer le compte' })
+                }
+            })
+        } else {
+            res.status(404).json({ error: 'Profil non trouvé' })
+        }
+    })
+    .catch((error) => res.status(500).json({ error: 'Impossible de supprimer le compte' }))
+}
+
+// -- Module de chargement de tous les Utilisateurs dans un ordre croissant -- \\
+exports.getAllProfil = (req, res, next) => {
+    models.User.findAll({
+        order: [['name', 'ASC']]
+    })
+        .then((users) => res.status(200).json({ users }))
+        .catch((error) => res.status(404).json({ error }))
+};

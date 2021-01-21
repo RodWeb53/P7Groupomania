@@ -6,7 +6,6 @@ import VueRouter from 'vue-router'
 import Routes from './Routes/Routes'
 import store from './store'
 import VeeValidate from 'vee-validate';
-//import axios from 'axios'
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 import moment from 'moment'
@@ -14,11 +13,11 @@ import moment from 'moment'
 Vue.config.productionTip = false
 Vue.use(VeeValidate);
 Vue.use(VueRouter)
-//Vue.use(axios)
+
 
 Vue.filter('formatDate', function(value) {
   if (value) {
-    return moment(String(value)).format('DD/MM/YYYY hh:mm')
+    return moment(String(value)).format('DD/MM/YYYY HH:mm')
   }
 });
 
