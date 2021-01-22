@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-3" v-if="$store.state.isUserLoggedIn">
+  <div class="container haut pt-5 pb-5 mt-5 mb-4" v-if="$store.state.isUserLoggedIn">
     <!-- Affichage des posts de l'utilisateur souhaité -->
     <div class="container mt-5" v-bind:key="index" v-for="(message, index) in allMessages">
       <div class="row">
@@ -47,7 +47,9 @@
                   <div class="card-header">
                     <div class="row">
                       <div class="col-2">
+                        <router-link :to="`/profil/${comment.userId}`">
                           <img :src="comment.User.avatar" style="width:40px">
+                        </router-link>
                       </div>
                       <div class="col-5">
                         <p>Commentaire créer par : {{ comment.User.name }}</p>
@@ -239,5 +241,12 @@ export default {
 <style scoped>
 .sup {
   color: red;
+}
+.haut {
+
+  height: 100vh;
+}
+.haut:fullscreen {
+    height: 100%;
 }
 </style>

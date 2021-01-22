@@ -3,12 +3,12 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Users', [{
-      name: 'UserBase',
-      email: 'userbase@groupomania.fr',
-      password: '$2b$10$9nK9T01Gfz4DRwVCjC6dK.whYLAaL7EDZEH85V.uqOii83fRklPsW',
-      avatar: 'http://localhost:3000/images/img-profil-base.png',
+      name: 'rodolphe',
+      email: 'rodolphe@groupomania.com',
+      password: '$2a$10$LGvlyQrbAsEygQ7CnAK7xOv1AzAAWJZMP8pmQDwGO28uMb0RAs0ji',
+      avatar: 'http://localhost:3000/images/admin1.jpg1610883623042.jpg',
       isModerateur: false,
-      bio: 'Pensez à compléter la bio de votre profil...',
+      bio: 'La biographie à été mise à jour le 16/01/2021',
       createdAt: new Date(),
       updatedAt: new Date()
     }]);

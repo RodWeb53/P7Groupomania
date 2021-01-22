@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-3" v-if="$store.state.isUserLoggedIn">
+  <div class="container haut pt-5 pb-5 mt-5 mb-4" v-if="$store.state.isUserLoggedIn">
     <div class="text-center">
       <!-- /// Route pour retourner vers les messages \\\ -->
       <router-link :to="`/message`">
@@ -158,6 +158,10 @@ export default {
               window.location.reload()      
         }) 
         .catch(error => {console.log('An error occurred:', error.response);})
+    },
+
+    messageLien() {
+      this.$router.push('/message')
     },
 
     userChange() {
@@ -384,5 +388,11 @@ export default {
 /* Couleur vert pour la l'icone de modification du message */
 .edit {
   color: green;
+}
+.haut {
+  height: 100vh;
+}
+.haut:fullscreen {
+    height: 100%;
 }
 </style>

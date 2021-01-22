@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-3" v-if="$store.state.isUserLoggedIn">
+  <div class="container pt-5 pb-4 mt-5 mb-4" v-if="$store.state.isUserLoggedIn">
     <!-- lignes de card pour faire apparaitre les posts plus les commentaires -->
     <div class="container mt-3" >
       <div class="row"  v-bind:key="index" v-for="(user, index) in allUsers">

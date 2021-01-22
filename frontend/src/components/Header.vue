@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- /// Barre de navigation pour la version desktop et mobile \\\ -->
-    <nav id="barnav" class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark">
+    <nav id="barnav" class="navbar fixed-top navbar-icon-top navbar-expand-lg navbar-dark">
       <div class="navbar-brand"><img src="../assets/Groupomania-recadre.png" class="m-0 p-0" height="50" alt="logo groupomania">
       </div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,9 +75,11 @@
       </div>
     </nav>
   </div>
+
 </template>
 
 <script>
+
 export default {
   name: 'Header',
 
@@ -115,5 +117,9 @@ export default {
 </script>
 
 <style scoped>
+#barnav {
+  background-color: #132544;
+
+}
 
 </style>

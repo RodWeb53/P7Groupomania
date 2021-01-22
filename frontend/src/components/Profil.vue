@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5" v-if="$store.state.isUserLoggedIn"  >
+  <div class="container haut pt-5 pb-5 mt-5 mb-4" v-if="$store.state.isUserLoggedIn"  >
     <div class="card-deck mb-3">
         <div class="card text-center">
             <!-- /// Affichage pour l'Avatar du profil et modification si on est l'utilisateur \\\ -->
@@ -103,12 +103,12 @@ export default {
       id: this.$route.params.id,
       user: [],
       password: '',
-      profil: false,
+      profil: true,
       passe: false,
       delet: false,
       law: false,
       avatar:'',
-      avatarTest: false,
+      avatarTest: true,
       changeBio: '',
       changePassword:'',
       newAvatar: '/images/avatar-default.png',
@@ -305,5 +305,9 @@ export default {
 </script>
 
 <style scoped>
+
+.haut {
+  height: 100vh;
+}
 
 </style>

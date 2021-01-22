@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <div class="container pt-5 pb-5 mt-5 mb-4">
     <div class="card">
       <div class="card-header text-center">
         <h1>Connexion au réseau social de Groupomania</h1>
@@ -52,5 +52,10 @@ export default {
 </script>
 
 <style scoped>
-
+.container {
+  height: 100vh;
+}
+.card {
+  opacity: 0.9;
+}
 </style>
