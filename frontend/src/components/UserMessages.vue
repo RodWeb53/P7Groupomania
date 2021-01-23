@@ -33,7 +33,7 @@
                 </div>
                 <!-- Si 'utilisateur ou modérateur' acces pour la suppression du message  -->
                 <div class="col-1">
-                  <button v-if="message.User.userId === $store.state.userId || $store.state.isModerateur" type="button" class="btn btn-default btn-lg sup" @click="deleteMessage()"><i class="far fa-trash-alt"></i></button>
+                  <button v-if="message.User.userId === $store.state.userId || $store.state.isModerateur" type="button" class="btn btn-default btn-lg sup" @click="deleteMessage(message.msgId)"><i class="far fa-trash-alt"></i></button>
                 </div>
               </div>
             </div>
@@ -103,7 +103,7 @@ export default {
     }
   },
   methods : {
-    deleteMessage() {
+    deleteMessage(msgId) {
       Swal.fire({
         title: 'Suppression du message ?',
         text: "Attention il est impossible de revenir en arrière !",
@@ -121,7 +121,7 @@ export default {
             showConfirmButton: false,
             timer: 1000
         })
-        axios.delete(`http://localhost:3000/message/${this.id}`, {
+        axios.delete(`http://localhost:3000/message/` + msgId, {
           headers: {Authorization: `Bearer ${store.state.token}`},}
           )
           this.$router.push('/message/')
