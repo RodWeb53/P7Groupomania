@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Messages', [{
-      userId: 3,
+      userId: 4,
       content: 'Le message est le premier pour cet utilisateur',
       createdAt: new Date(),
       updatedAt: new Date()
